@@ -23,14 +23,14 @@ def softmax_loss_naive(W, X, y, reg):
     loss = 0.0
     dW = np.zeros_like(W)
     num_train = X.shape[0]
-    stab_factor = 1e-10
+    
     for i in range(num_train):
         scores = X[i].dot(W)
         #scores -=np.max(scores)
-        exp_scores = np.exp(scores)
+        exp_scores = np.exp(scores-np.max(scores))
         probs = exp_scores / np.sum(exp_scores)
         
-        logprobs = -np.log(probs[y[i]]+stab_factor)
+        logprobs = -np.log(probs[y[i]])
         loss += logprobs
         
         dscore = probs
@@ -57,7 +57,6 @@ def softmax_loss_vectorized(W, X, y, reg):
     dW = np.zeros_like(W)
     num_train=X.shape[0]
 
-    stab_factor = 1e-10
     #############################################################################
     # TODO: Compute the softmax loss and its gradient using no explicit loops.  #
     # Store the loss in loss and the gradient in dW. If you are not careful     #
@@ -66,12 +65,12 @@ def softmax_loss_vectorized(W, X, y, reg):
     #############################################################################
 
     scores = np.dot(X, W)
-    exp_scores = np.exp(scores)
+    exp_scores = np.exp(scores-np.max(scores, axis=1, keepdims=True))
     probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
     
     reg_loss = 0.5*reg*np.sum(W*W)
     
-    logprobs = -np.log(probs[range(num_train), y] + stab_factor)
+    logprobs = -np.log(probs[range(num_train), y])
     data_loss = np.sum(logprobs)/num_train
     loss = data_loss + reg_loss
     
