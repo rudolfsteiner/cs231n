@@ -2,6 +2,8 @@
 Stanford CS class CS231n: Convolutional Neural Networks for Visual Recognition
 Winter 2016
 
+It took me two weeks to implement the assignment. All the algorithm were implemented in Python.
+
 
 Assignment list:
 
